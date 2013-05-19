@@ -81,6 +81,14 @@ package { 'git':
   ensure => installed
 }
 
+package { 'tmux':
+  ensure => installed
+}
+
+package { 'vim':
+  ensure => installed
+}
+
 # Nokogiri dependencies.
 package { ['libxml2', 'libxml2-dev', 'libxslt1-dev']:
   ensure => installed

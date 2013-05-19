@@ -30,7 +30,7 @@ Port 3000 in the host computer is forwarded to port 3000 in the virtual machine.
 
 * rbenv w/ rbenv-vars and ruby-build
 
-* Ruby 2.0.0
+* Ruby 2.0.0-p195
 
 * Bundler
 
@@ -43,6 +43,8 @@ Port 3000 in the host computer is forwarded to port 3000 in the virtual machine.
 * Node.js for the asset pipeline
 
 * Memcached
+
+* tmux and vim
 
 ## Virtual Machine Management
 
