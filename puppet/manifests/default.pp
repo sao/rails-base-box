@@ -104,7 +104,7 @@ class { 'install_rbenv': }
 class install_rbenv_plugins {
   require install_rbenv
 
-  rbenv::plugin::rbenvvars { $app: }
+  rbenv::plugin::rbenvvars { 'vagrant': }
 }
 class { 'install_rbenv_plugins': }
 
