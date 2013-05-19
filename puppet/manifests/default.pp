@@ -1,13 +1,11 @@
-$app        = "vagrant"
-$databases  = ["activerecord_unittest", "activerecord_unittest2"]
-$as_vagrant = "sudo -u ${app} -H bash -l -c"
-$home       = "/home/${app}"
+$databases  = ["rails_development", "rails_test"]
+$home       = "/home/vagrant"
 
 Exec {
   path => ['/usr/sbin', '/usr/bin', '/sbin', '/bin']
 }
 
-# --- Preinstall Stage ---------------------------------------------------------
+# preinstall
 
 stage { 'preinstall':
   before => Stage['main']
@@ -22,13 +20,13 @@ class { 'apt_get_update':
   stage => preinstall
 }
 
-# --- SQLite -------------------------------------------------------------------
+# sqlite
 
 package { ['sqlite3', 'libsqlite3-dev']:
   ensure => installed;
 }
 
-# --- PostgreSQL ---------------------------------------------------------------
+# postgres
 
 class install_postgres {
   class { 'postgresql': }
@@ -42,12 +40,14 @@ class install_postgres {
   }
 
   pg_user { 'rails':
-    ensure  => present,
-    require => Class['postgresql::server']
+    ensure   => present,
+    password => 'rails',
+    require  => Class['postgresql::server']
   }
 
-  pg_user { $app:
+  pg_user { 'vagrant':
     ensure    => present,
+    password  => 'vagrant',
     superuser => true,
     require   => Class['postgresql::server']
   }
@@ -63,11 +63,11 @@ class install_postgres {
 }
 class { 'install_postgres': }
 
-# --- Memcached ----------------------------------------------------------------
+# memcached
 
 class { 'memcached': }
 
-# --- Packages -----------------------------------------------------------------
+# packages
 
 package { 'build-essential':
   ensure => installed
@@ -91,11 +91,11 @@ package { 'nodejs':
   ensure => installed
 }
 
-# --- Ruby ---------------------------------------------------------------------
+# ruby
 
 class install_rbenv {
-  rbenv::install { $app:
-    group => $app,
+  rbenv::install { 'vagrant':
+    group => 'vagrant',
     home  => $home
   }
 }
@@ -112,7 +112,7 @@ class install_ruby {
   require install_rbenv_plugins
 
   rbenv::compile { "2.0.0-p195":
-    user => $app,
+    user => 'vagrant',
     home => $home
   }
 }
