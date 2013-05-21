@@ -24,6 +24,8 @@ Building the virtual machine is this easy:
 
 Port 3000 in the host computer is forwarded to port 3000 in the virtual machine. Thus, applications running in the virtual machine can be accessed via localhost:3000 in the host computer.
 
+Ports 8080, 6379 and 6900 are also forwarded.
+
 ## What's In The Box
 
 * Git
