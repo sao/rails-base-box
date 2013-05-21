@@ -10,7 +10,7 @@ This is a base box to use for Ruby on Rails Development. Inspired by fxn's [rail
 
 * [Vagrant](http://vagrantup.com)
 
-## How To Build The Virtual Machine
+## How To Build The VM
 
 Building the virtual machine is this easy:
 
@@ -28,13 +28,19 @@ Port 3000 in the host computer is forwarded to port 3000 in the virtual machine.
 
 * Git
 
-* rbenv w/ rbenv-vars and ruby-build
+* rbenv including rbenv-vars and ruby-build
 
-* Ruby 2.0.0-p195
+* Ruby 2.0.0-p195 (global)
+
+* Gems including foreman, pg and thin
 
 * Bundler
 
-* SQLite3 and Postgres
+* SQLite3
+
+* Postgres with databases and users
+
+* Redis with two instances
 
 * System dependencies for nokogiri, sqlite3 and pg
 
@@ -44,9 +50,13 @@ Port 3000 in the host computer is forwarded to port 3000 in the virtual machine.
 
 * Memcached
 
-* tmux and vim
+* tmux, vim, exuberant-ctags
 
-## Virtual Machine Management
+* GCC
+
+* wget
+
+## Vagrant Management
 
 When done just log out with `^D` and suspend the virtual machine
 

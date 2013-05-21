@@ -1,6 +1,6 @@
-$databases  = ["rails_development", "rails_test"]
-$home       = "/home/vagrant"
-
+$databases  = ['rails_development', 'rails_test']
+$home       = '/home/vagrant'
+$ruby       = '2.0.0-p195'
 Exec {
   path => ['/usr/sbin', '/usr/bin', '/sbin', '/bin']
 }
@@ -13,9 +13,10 @@ stage { 'preinstall':
 
 class apt_get_update {
   exec { 'apt-get -y update':
-    command => "apt-get -y update"
+    command => 'apt-get -y update'
   }
 }
+
 class { 'apt_get_update':
   stage => preinstall
 }
@@ -63,38 +64,43 @@ class install_postgres {
 }
 class { 'install_postgres': }
 
+# redis
+
+class install_redis {
+  class { 'redis':
+    version => '2.6.13',
+  }
+
+  redis::instance { 'redis-6900':
+    redis_port       => '6900',
+    redis_password   => 'vagrant',
+    redis_max_memory => '1gb',
+  }
+}
+class { 'install_redis': }
+
 # memcached
 
 class { 'memcached': }
 
 # packages
 
-package { 'build-essential':
+# Standard packages
+package { ['curl', 'git', 'tmux', 'vim', 'vim-gtk', 'exuberant-ctags']:
   ensure => installed
 }
 
-package { 'curl':
+# Development dependencies
+package { ['libcurl4-openssl-dev', 'libksba8', 'libksba-dev', 'libqtwebkit-dev', 'imagemagick', 'watch']:
   ensure => installed
 }
 
-package { 'git':
-  ensure => installed
-}
-
-package { 'tmux':
-  ensure => installed
-}
-
-package { 'vim':
-  ensure => installed
-}
-
-# Nokogiri dependencies.
+# Nokogiri dependencies
 package { ['libxml2', 'libxml2-dev', 'libxslt1-dev']:
   ensure => installed
 }
 
-# ExecJS runtime.
+# ExecJS runtime
 package { 'nodejs':
   ensure => installed
 }
@@ -119,9 +125,20 @@ class { 'install_rbenv_plugins': }
 class install_ruby {
   require install_rbenv_plugins
 
-  rbenv::compile { "2.0.0-p195":
-    user => 'vagrant',
-    home => $home
+  rbenv::compile { $ruby:
+    user   => 'vagrant',
+    home   => $home,
+    global => true
   }
 }
 class { 'install_ruby': }
+
+class install_gems {
+  require install_ruby
+
+  rbenv::gem { ['foreman', 'pg', 'thin']:
+    user => 'vagrant',
+    ruby => $ruby,
+  }
+}
+class { 'install_gems': }
